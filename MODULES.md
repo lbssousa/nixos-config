@@ -92,6 +92,34 @@ A configuração foi modularizada para:
 
 **Usado por**: barbudus, bigodon (não nixbox)
 
+### `modules/niri.nix`
+**Compositor Wayland Niri**
+
+- Niri compositor com scrollable tiling
+- XDG Desktop Portal (GNOME)
+- Polkit com agente gráfico
+- Autologin na tty1
+- Variáveis de ambiente Wayland
+- Ferramentas: grim, slurp, mako, fuzzel, waybar
+- Fontes completas (Nerd Fonts, Noto, etc.)
+- Hardware acceleration
+
+**Usado por**: barbudus, bigodon (não nixbox)
+
+### `modules/wayland-apps.nix`
+**Aplicativos essenciais para Wayland**
+
+- Ghostty (terminal acelerado por GPU)
+- NetworkManager applet
+- QuickShell + Qt6
+- Thunar file manager + plugins
+- Utilitários: wtype, wlr-randr, kanshi
+- Screenshot/screencast: grimblast, wf-recorder
+- Clipboard: cliphist
+- Viewers: imv, zathura
+
+**Usado por**: barbudus, bigodon (não nixbox)
+
 ## 🏗️ Estrutura dos Hosts
 
 ### barbudus (Dell Inspiron 14 5490)
@@ -105,6 +133,8 @@ imports = [
   ../../modules/ssh.nix
   ../../modules/users.nix
   ../../modules/desktop.nix  # Desktop físico
+  ../../modules/niri.nix     # Compositor Wayland
+  ../../modules/wayland-apps.nix
 ];
 
 # Configurações específicas:
@@ -123,6 +153,8 @@ imports = [
   ../../modules/ssh.nix
   ../../modules/users.nix
   ../../modules/desktop.nix  # Desktop físico
+  ../../modules/niri.nix     # Compositor Wayland
+  ../../modules/wayland-apps.nix
 ];
 
 # Configurações específicas:
@@ -259,7 +291,6 @@ flake.nix
 
 Módulos que podem ser adicionados:
 
-- `modules/nvidia.nix` - Configuração Nvidia isolada
 - `modules/gaming.nix` - Steam, gamemode, etc.
 - `modules/development.nix` - Ferramentas de dev
 - `modules/desktop-gnome.nix` - Desktop GNOME
@@ -267,6 +298,34 @@ Módulos que podem ser adicionados:
 - `modules/virtualisation.nix` - VMs (não containers)
 - `modules/server.nix` - Configurações de servidor
 - `modules/minimal.nix` - Sistema minimalista
+
+## 🎨 Niri + QuickShell + Ghostty
+
+O sistema usa uma stack Wayland moderna sem display manager:
+
+- **Niri**: Compositor com scrollable tiling layout único
+- **QuickShell**: Barra de status personalizável em QML
+- **Ghostty**: Terminal acelerado por GPU
+- **Noctalia**: Tema dark unificado (Catppuccin Mocha)
+- **Autologin**: Login automático na tty1, Niri inicia diretamente
+
+### Atalhos do Teclado (Niri)
+
+- `Super+Return`: Abrir Ghostty
+- `Super+D`: Launcher (fuzzel)
+- `Super+Q`: Fechar janela
+- `Super+H/J/K/L`: Navegar entre janelas
+- `Super+1-5`: Trocar workspace
+- `Super+F`: Maximizar coluna
+- `Super+Shift+E`: Sair do Niri
+
+### Ferramentas Disponíveis
+
+- NetworkManager applet para Wi-Fi
+- Mako para notificações
+- Grim/Slurp para screenshots
+- Thunar como file manager
+- Polkit agent para elevação de privilégios
 
 ## 💡 Dicas
 

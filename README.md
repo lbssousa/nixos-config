@@ -15,6 +15,9 @@ Configuração pessoal do NixOS baseada em Flakes, com particionamento declarati
 - ✅ **Multi-host**: Configurações específicas para cada máquina
 - ✅ **Distrobox**: Execute qualquer distribuição Linux em containers rootless
 - ✅ **Modular**: Módulos compartilhados para fácil manutenção
+- ✅ **Niri**: Compositor Wayland moderno com scrollable tiling
+- ✅ **QuickShell**: Barra de status personalizável
+- ✅ **Ghostty**: Terminal acelerado por GPU
 
 ## 🖥️ Hosts Suportados
 
@@ -62,7 +65,9 @@ Configuração pessoal do NixOS baseada em Flakes, com particionamento declarati
 │   ├── packages.nix          # Pacotes essenciais
 │   ├── ssh.nix               # Servidor SSH
 │   ├── users.nix             # Usuário padrão
-│   └── desktop.nix           # Bluetooth, impressão, Flatpak
+│   ├── desktop.nix           # Bluetooth, impressão, Flatpak
+│   ├── niri.nix              # Compositor Niri + Wayland
+│   └── wayland-apps.nix      # Ghostty, NetworkManager, ferramentas
 ├── INSTALLATION.md           # Guia de instalação detalhado
 ├── NIXOS_CONFIG_SPECS.md     # Especificações do projeto
 ├── BTRFS_SUBVOLUMES.md       # Documentação dos subvolumes
