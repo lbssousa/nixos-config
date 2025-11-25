@@ -14,6 +14,7 @@ Configuração pessoal do NixOS baseada em Flakes, com particionamento declarati
 - ✅ **Home Manager**: Gerenciamento de configurações de usuário
 - ✅ **Multi-host**: Configurações específicas para cada máquina
 - ✅ **Distrobox**: Execute qualquer distribuição Linux em containers rootless
+- ✅ **Modular**: Módulos compartilhados para fácil manutenção
 
 ## 🖥️ Hosts Suportados
 
@@ -46,18 +47,27 @@ Configuração pessoal do NixOS baseada em Flakes, com particionamento declarati
 ├── disko.nix                 # Template base de particionamento
 ├── hosts/                    # Configurações específicas por host
 │   ├── barbudus/
-│   │   ├── configuration.nix        # Config principal
+│   │   ├── configuration.nix        # Config específica (Nvidia, etc.)
 │   │   ├── hardware-configuration.nix # Hardware + disko + swap
 │   │   └── disko.nix                # Parâmetros do disko
 │   ├── bigodon/
 │   │   └── ...
 │   └── nixbox/
 │       └── ...
-├── modules/                  # Módulos compartilhados (futuro)
+├── modules/                  # Módulos compartilhados
+│   ├── common.nix            # Configurações básicas (boot, locale, nix)
+│   ├── audio.nix             # PipeWire
+│   ├── containers.nix        # Podman + Distrobox
+│   ├── impermanence.nix      # Configuração de persistência
+│   ├── packages.nix          # Pacotes essenciais
+│   ├── ssh.nix               # Servidor SSH
+│   ├── users.nix             # Usuário padrão
+│   └── desktop.nix           # Bluetooth, impressão, Flatpak
 ├── INSTALLATION.md           # Guia de instalação detalhado
 ├── NIXOS_CONFIG_SPECS.md     # Especificações do projeto
 ├── BTRFS_SUBVOLUMES.md       # Documentação dos subvolumes
 ├── SWAP_CONFIG.md            # Documentação da swap híbrida
+├── DISTROBOX.md              # Guia de uso do Distrobox
 └── README.md                 # Este arquivo
 ```
 
