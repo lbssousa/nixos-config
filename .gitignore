@@ -1,0 +1,22 @@
+# Nix build results
+result
+result-*
+
+# Hardware configuration (may contain sensitive info)
+# Uncomment these if you don't want to share hardware details
+# hosts/*/hardware-configuration.nix
+
+# Secrets
+*.age
+*.secret
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db

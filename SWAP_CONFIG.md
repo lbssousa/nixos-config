@@ -24,9 +24,9 @@ Este repositório implementa uma estratégia de swap híbrida otimizada para dif
 
 **Arquivos de configuração:**
 - `hosts/barbudus/disko.nix` - Particionamento com swap 20GB
-- `hosts/barbudus/swap.nix` - Configuração zram
+- `hosts/barbudus/hardware-configuration.nix` - Hardware + configuração zram
 - `hosts/bigodon/disko.nix` - Particionamento com swap 20GB
-- `hosts/bigodon/swap.nix` - Configuração zram
+- `hosts/bigodon/hardware-configuration.nix` - Hardware + configuração zram
 
 ### 🖧 nixbox (VirtualBox VM)
 **Máquina Virtual**
@@ -44,7 +44,7 @@ Este repositório implementa uma estratégia de swap híbrida otimizada para dif
 
 **Arquivos de configuração:**
 - `hosts/nixbox/disko.nix` - Particionamento sem swap
-- `hosts/nixbox/swap.nix` - Configuração zram
+- `hosts/nixbox/hardware-configuration.nix` - Hardware + configuração zram
 
 ## Como Usar
 
@@ -58,8 +58,10 @@ Este repositório implementa uma estratégia de swap híbrida otimizada para dif
      swapSize = "20G";     # "0" para desabilitar
    }
    ```
-3. Crie `swap.nix` com a configuração zram apropriada
-4. Importe ambos arquivos na configuração principal do host
+3. Em `hardware-configuration.nix`, adicione:
+   - Import do disko: `(import ./disko.nix { inherit lib; })`
+   - Configuração zram apropriada (veja exemplos nos outros hosts)
+4. Importe o `hardware-configuration.nix` na configuração principal do host
 
 ### Ajustes recomendados
 
