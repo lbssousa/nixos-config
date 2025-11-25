@@ -13,6 +13,7 @@ Configuração pessoal do NixOS baseada em Flakes, com particionamento declarati
 - ✅ **Subvolumes otimizados**: Isolamento para Flatpak, Podman e logs
 - ✅ **Home Manager**: Gerenciamento de configurações de usuário
 - ✅ **Multi-host**: Configurações específicas para cada máquina
+- ✅ **Distrobox**: Execute qualquer distribuição Linux em containers rootless
 
 ## 🖥️ Hosts Suportados
 
@@ -107,6 +108,7 @@ sudo nixos-rebuild switch --rollback
 - **[NIXOS_CONFIG_SPECS.md](NIXOS_CONFIG_SPECS.md)**: Especificações e requisitos
 - **[BTRFS_SUBVOLUMES.md](BTRFS_SUBVOLUMES.md)**: Estrutura de subvolumes Btrfs
 - **[SWAP_CONFIG.md](SWAP_CONFIG.md)**: Configuração de swap híbrida
+- **[DISTROBOX.md](DISTROBOX.md)**: Guia de uso do Distrobox
 
 ## 🔧 Customização
 
@@ -176,6 +178,10 @@ sudo btrfs subvolume list /
 # Ver uso de swap
 swapon --show
 zramctl
+
+# Distrobox - criar container
+distrobox create --name archlinux --image archlinux:latest
+distrobox enter archlinux
 ```
 
 ## 🤝 Contribuindo

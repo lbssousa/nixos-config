@@ -48,6 +48,8 @@
     neovim
     nix-index
     zathura
+    # Distrobox for running any Linux distribution in containers
+    distrobox
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the

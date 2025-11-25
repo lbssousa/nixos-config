@@ -86,7 +86,24 @@
     initialPassword = "changeme"; # Change on first login
   };
 
-  # System packages
+  # Enable Flatpak
+  services.flatpak.enable = true;
+
+  # Enable common container config files in /etc/containers
+  virtualisation.containers.enable = true;
+
+  # Enable Podman for rootless containers (required for Distrobox)
+  virtualisation.podman = {
+    enable = true;
+    # Create a `docker` alias for podman
+    dockerCompat = true;
+    # Required for containers under podman-compose to be able to talk to each other
+    defaultNetwork.settings.dns_enabled = true;
+    # Enable support for rootless containers
+    # Podman will use user namespaces to run containers without root privileges
+  };
+
+  # Additional packages for container management
   environment.systemPackages = with pkgs; [
     git
     vim
@@ -96,17 +113,11 @@
     pciutils
     usbutils
     nvidia-offload # Helper script for PRIME offload
+    # Container tools
+    dive # look into docker image layers
+    podman-tui # status of containers in the terminal
+    podman-compose # start group of containers for dev
   ];
-
-  # Enable Flatpak
-  services.flatpak.enable = true;
-
-  # Enable Podman
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-    defaultNetwork.settings.dns_enabled = true;
-  };
 
   # Impermanence configuration
   environment.persistence."/persist" = {
