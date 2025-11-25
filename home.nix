@@ -100,6 +100,95 @@
     EDITOR = "nvim";
   };
 
+  # ZSH configuration
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
+    
+    history = {
+      size = 10000;
+      path = "${config.home.homeDirectory}/.zsh_history";
+      ignoreDups = true;
+      share = true;
+    };
+    
+    shellAliases = {
+      ls = "ls --color=auto";
+      ll = "ls -lah";
+      vim = "nvim";
+      cat = "bat";
+      grep = "rg";
+      find = "fd";
+    };
+    
+    initExtra = ''
+      # Case insensitive completion
+      zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+      
+      # Better history search
+      bindkey '^[[A' history-substring-search-up
+      bindkey '^[[B' history-substring-search-down
+    '';
+  };
+
+  # Starship prompt
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    
+    settings = {
+      add_newline = true;
+      
+      format = lib.concatStrings [
+        "$username"
+        "$hostname"
+        "$directory"
+        "$git_branch"
+        "$git_status"
+        "$nix_shell"
+        "$nodejs"
+        "$python"
+        "$rust"
+        "$golang"
+        "$cmd_duration"
+        "$line_break"
+        "$character"
+      ];
+      
+      character = {
+        success_symbol = "[➜](bold green)";
+        error_symbol = "[➜](bold red)";
+      };
+      
+      directory = {
+        truncation_length = 3;
+        truncate_to_repo = true;
+        style = "bold cyan";
+      };
+      
+      git_branch = {
+        symbol = "🌱 ";
+        style = "bold purple";
+      };
+      
+      git_status = {
+        style = "bold yellow";
+      };
+      
+      nix_shell = {
+        symbol = "❄️ ";
+        style = "bold blue";
+      };
+      
+      cmd_duration = {
+        min_time = 500;
+        format = "took [$duration](bold yellow)";
+      };
+    };
+  };
+
   # Niri compositor configuration
   programs.niri = {
     enable = true;
@@ -346,13 +435,7 @@
   };
 
   # Start Niri on login from tty1
-  programs.bash.profileExtra = ''
-    if [ -z "$DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
-      exec niri-session
-    fi
-  '';
-
-  programs.zsh.profileExtra = ''
+  programs.zsh.loginExtra = ''
     if [ -z "$DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
       exec niri-session
     fi
