@@ -68,50 +68,50 @@ in {
 
                 subvolumes = {
                   # Subvolume raiz - ephemeral, limpo a cada boot (impermanence)
-                  "/@" = {
+                  "@" = {
                     mountpoint = "/";
-                    mountOptions = ["subvol=@" "compress=zstd" "noatime"];
+                    mountOptions = ["compress=zstd" "noatime"];
                   };
 
                   # Diretórios de usuário - preservados
-                  "/@home" = {
-                    mountOptions = ["subvol=@home" "compress=zstd" "noatime"];
+                  "@home" = {
+                    mountOptions = ["compress=zstd" "noatime"];
                     mountpoint = "/home";
                   };
 
                   # Nix store - preservado (essencial)
-                  "/@nix" = {
-                    mountOptions = ["subvol=@nix" "compress=zstd" "noatime"];
+                  "@nix" = {
+                    mountOptions = ["compress=zstd" "noatime"];
                     mountpoint = "/nix";
                   };
 
                   # Dados persistentes do sistema - preservados
-                  "/@persist" = {
-                    mountOptions = ["subvol=@persist" "compress=zstd" "noatime"];
+                  "@persist" = {
+                    mountOptions = ["compress=zstd" "noatime"];
                     mountpoint = "/persist";
                   };
 
                   # Logs do sistema - preservados, sem compressão (já comprimidos)
-                  "/@log" = {
-                    mountOptions = ["subvol=@log" "noatime" "nocomp"];
+                  "@log" = {
+                    mountOptions = ["noatime"];
                     mountpoint = "/var/log";
                   };
 
                   # Dados de containers (Podman, Docker, etc.) - preservados
-                  "/@containers" = {
-                    mountOptions = ["subvol=@containers" "compress=zstd" "noatime"];
+                  "@containers" = {
+                    mountOptions = ["compress=zstd" "noatime"];
                     mountpoint = "/var/lib/containers";
                   };
 
                   # Dados de Flatpak - preservados
-                  "/@flatpak" = {
-                    mountOptions = ["subvol=@flatpak" "compress=zstd" "noatime"];
+                  "@flatpak" = {
+                    mountOptions = ["compress=zstd" "noatime"];
                     mountpoint = "/var/lib/flatpak";
                   };
 
                   # Snapshots - para backups futuros
-                  "/@snapshots" = {
-                    mountOptions = ["subvol=@snapshots" "compress=zstd" "noatime"];
+                  "@snapshots" = {
+                    mountOptions = ["compress=zstd" "noatime"];
                     mountpoint = "/.snapshots";
                   };
                 };
