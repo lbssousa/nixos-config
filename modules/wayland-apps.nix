@@ -10,8 +10,11 @@
     networkmanagerapplet  # Applet gráfico do NetworkManager
     
     # QuickShell dependencies
-    qt6.full
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtsvg
     qt6.qtwayland
+    libsForQt5.qt5.qtgraphicaleffects
     
     # Utilitários Wayland
     wtype  # Simular input de teclado

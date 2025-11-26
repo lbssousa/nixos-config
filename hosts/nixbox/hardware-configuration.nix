@@ -7,7 +7,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     # Disko configuration
-    (import ./disko.nix { inherit lib; })
+    ./disko.nix
   ];
 
   # CPU
@@ -17,8 +17,11 @@
   boot.extraModulePackages = [ ];
 
   # Filesystems are configured via disko.nix
-  fileSystems = lib.mkForce { };
+  # Leave empty to let disko configure them
   swapDevices = lib.mkForce [ ];
+
+  # Mark /persist as needed for boot (required by impermanence)
+  fileSystems."/persist".neededForBoot = true;
 
   # Swap apenas zram: 16 GB (100% da RAM) como única fonte
   zramSwap = {

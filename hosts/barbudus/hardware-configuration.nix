@@ -6,7 +6,7 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     # Disko configuration
-    (import ./disko.nix { inherit lib; })
+    ./disko.nix
   ];
 
   # CPU
@@ -19,8 +19,11 @@
   hardware.cpu.intel.updateMicrocode = true;
 
   # Filesystems are configured via disko.nix
-  fileSystems = lib.mkForce { };
+  # Leave empty to let disko configure them
   swapDevices = lib.mkForce [ ];
+
+  # Mark /persist as needed for boot (required by impermanence)
+  fileSystems."/persist".neededForBoot = true;
 
   # Swap híbrida: 20 GB em disco (hibernação) + 8 GB zram (performance)
   zramSwap = {

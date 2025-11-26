@@ -19,13 +19,16 @@
   virtualisation.virtualbox.guest.enable = true;
 
   # Enable OpenGL
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-    driSupport = true;
   };
 
-  # Flatpak para VMs
+  # Flatpak para VMs (precisa de XDG portal)
   services.flatpak.enable = true;
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  };
 
   # Adicionar vboxsf ao grupo do usuário
   users.users.laercio.extraGroups = [ "vboxsf" ];

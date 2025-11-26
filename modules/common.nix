@@ -2,6 +2,9 @@
 { config, lib, pkgs, ... }:
 
 {
+  # Allow unfree packages (needed for Nvidia drivers, etc.)
+  nixpkgs.config.allowUnfree = true;
+
   # Bootloader
   boot.loader = {
     systemd-boot.enable = true;

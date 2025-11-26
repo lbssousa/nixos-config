@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -18,13 +18,11 @@
   # Set git config
   programs.git = {
     enable = true;
-    userName  = "Laércio de Sousa";
-    userEmail = "laercio@sivali.sousa.nom.br";
-    signing = {
-      key = "5AB657FF72C72F35";
-      signByDefault = true;
-    };
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Laércio de Sousa";
+        email = "laercio@sivali.sousa.nom.br";
+      };
       init = {
         defaultBranch = "main";
       };
@@ -34,6 +32,10 @@
       rebase = {
         autostash = true;
       };
+    };
+    signing = {
+      key = "5AB657FF72C72F35";
+      signByDefault = true;
     };
   };
 
@@ -50,6 +52,8 @@
     zathura
     # Distrobox for running any Linux distribution in containers
     distrobox
+    # QuickShell - configurable status bar/shell
+    quickshell
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -123,7 +127,7 @@
       find = "fd";
     };
     
-    initExtra = ''
+    initContent = ''
       # Case insensitive completion
       zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
       
@@ -189,123 +193,110 @@
     };
   };
 
-  # Niri compositor configuration
-  programs.niri = {
-    enable = true;
+  # Niri compositor configuration via config file
+  home.file.".config/niri/config.kdl".text = ''
+    input {
+        keyboard {
+            xkb {
+                layout "br"
+            }
+        }
+        
+        touchpad {
+            tap
+            natural-scroll
+            dwt
+        }
+        
+        mouse {
+            accel-speed 0.0
+        }
+    }
     
-    settings = {
-      # Input configuration
-      input = {
-        keyboard = {
-          xkb = {
-            layout = "br";
-            variant = "";
-            options = "";
-          };
-        };
+    layout {
+        gaps 8
+        center-focused-column "never"
         
-        touchpad = {
-          tap = true;
-          natural-scroll = true;
-          dwt = true;
-        };
+        preset-column-widths {
+            proportion 0.33
+            proportion 0.5
+            proportion 0.67
+        }
         
-        mouse = {
-          accel-speed = 0.0;
-        };
-      };
-      
-      # Layout configuration
-      layout = {
-        gaps = 8;
-        center-focused-column = "never";
-        preset-column-widths = [
-          { proportion = 0.33; }
-          { proportion = 0.5; }
-          { proportion = 0.67; }
-        ];
-        default-column-width = { proportion = 0.5; };
-      };
-      
-      # Prefer dark theme
-      prefer-no-csd = true;
-      
-      # Cursor
-      cursor = {
-        size = 24;
-        theme = "Adwaita";
-      };
-      
-      # Screenshot path
-      screenshot-path = "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png";
-      
-      # Hotkey configuration
-      binds = {
-        # Mod key is Super (Windows key)
-        "Mod+Return".action.spawn = ["ghostty"];
-        "Mod+D".action.spawn = ["fuzzel"];
-        "Mod+Q".action.close-window = [];
+        default-column-width { proportion 0.5; }
+    }
+    
+    prefer-no-csd
+    
+    cursor {
+        size 24
+        theme "Adwaita"
+    }
+    
+    screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+    
+    // Keybindings
+    binds {
+        Mod+Return { spawn "ghostty"; }
+        Mod+D { spawn "fuzzel"; }
+        Mod+Q { close-window; }
         
-        # Screenshots
-        "Print".action.screenshot = [];
-        "Shift+Print".action.screenshot-screen = [];
-        "Mod+Print".action.screenshot-window = [];
+        // Screenshots
+        Print { screenshot; }
+        Shift+Print { screenshot-screen; }
+        Mod+Print { screenshot-window; }
         
-        # Focus navigation
-        "Mod+Left".action.focus-column-left = [];
-        "Mod+Right".action.focus-column-right = [];
-        "Mod+Up".action.focus-window-up = [];
-        "Mod+Down".action.focus-window-down = [];
-        "Mod+H".action.focus-column-left = [];
-        "Mod+L".action.focus-column-right = [];
-        "Mod+K".action.focus-window-up = [];
-        "Mod+J".action.focus-window-down = [];
+        // Focus navigation
+        Mod+Left { focus-column-left; }
+        Mod+Right { focus-column-right; }
+        Mod+Up { focus-window-up; }
+        Mod+Down { focus-window-down; }
+        Mod+H { focus-column-left; }
+        Mod+L { focus-column-right; }
+        Mod+K { focus-window-up; }
+        Mod+J { focus-window-down; }
         
-        # Move windows
-        "Mod+Shift+Left".action.move-column-left = [];
-        "Mod+Shift+Right".action.move-column-right = [];
-        "Mod+Shift+Up".action.move-window-up = [];
-        "Mod+Shift+Down".action.move-window-down = [];
-        "Mod+Shift+H".action.move-column-left = [];
-        "Mod+Shift+L".action.move-column-right = [];
-        "Mod+Shift+K".action.move-window-up = [];
-        "Mod+Shift+J".action.move-window-down = [];
+        // Move windows
+        Mod+Shift+Left { move-column-left; }
+        Mod+Shift+Right { move-column-right; }
+        Mod+Shift+Up { move-window-up; }
+        Mod+Shift+Down { move-window-down; }
+        Mod+Shift+H { move-column-left; }
+        Mod+Shift+L { move-column-right; }
+        Mod+Shift+K { move-window-up; }
+        Mod+Shift+J { move-window-down; }
         
-        # Workspaces
-        "Mod+1".action.focus-workspace = [1];
-        "Mod+2".action.focus-workspace = [2];
-        "Mod+3".action.focus-workspace = [3];
-        "Mod+4".action.focus-workspace = [4];
-        "Mod+5".action.focus-workspace = [5];
+        // Workspaces
+        Mod+1 { focus-workspace 1; }
+        Mod+2 { focus-workspace 2; }
+        Mod+3 { focus-workspace 3; }
+        Mod+4 { focus-workspace 4; }
+        Mod+5 { focus-workspace 5; }
         
-        "Mod+Shift+1".action.move-window-to-workspace = [1];
-        "Mod+Shift+2".action.move-window-to-workspace = [2];
-        "Mod+Shift+3".action.move-window-to-workspace = [3];
-        "Mod+Shift+4".action.move-window-to-workspace = [4];
-        "Mod+Shift+5".action.move-window-to-workspace = [5];
+        Mod+Shift+1 { move-window-to-workspace 1; }
+        Mod+Shift+2 { move-window-to-workspace 2; }
+        Mod+Shift+3 { move-window-to-workspace 3; }
+        Mod+Shift+4 { move-window-to-workspace 4; }
+        Mod+Shift+5 { move-window-to-workspace 5; }
         
-        # Window management
-        "Mod+F".action.maximize-column = [];
-        "Mod+Shift+F".action.fullscreen-window = [];
-        "Mod+Comma".action.consume-window-into-column = [];
-        "Mod+Period".action.expel-window-from-column = [];
+        // Window management
+        Mod+F { maximize-column; }
+        Mod+Shift+F { fullscreen-window; }
+        Mod+Comma { consume-window-into-column; }
+        Mod+Period { expel-window-from-column; }
         
-        # Column widths
-        "Mod+R".action.set-column-width = ["-10%"];
-        "Mod+T".action.set-column-width = ["+10%"];
+        // Column widths
+        Mod+R { set-column-width "-10%"; }
+        Mod+T { set-column-width "+10%"; }
         
-        # Exit niri
-        "Mod+Shift+E".action.quit = [];
-      };
-      
-      # Autostart programs
-      spawn-at-startup = [
-        { command = ["mako"]; }
-        { command = ["nm-applet" "--indicator"]; }
-        { command = ["quickshell"]; }
-      ];
-    };
-  };
+        // Exit niri
+        Mod+Shift+E { quit; }
+    }
+    
+    spawn-at-startup "mako"
+    spawn-at-startup "nm-applet" "--indicator"
+    spawn-at-startup "quickshell"
+  '';
 
   # Ghostty terminal configuration
   programs.ghostty = {
@@ -326,25 +317,22 @@
   # Mako notification daemon
   services.mako = {
     enable = true;
-    defaultTimeout = 5000;
-    ignoreTimeout = true;
-    maxVisible = 5;
-    font = "sans-serif 11";
-    backgroundColor = "#1e1e2e";
-    textColor = "#cdd6f4";
-    borderColor = "#89b4fa";
-    borderSize = 2;
-    borderRadius = 8;
-    padding = "10";
-    margin = "10";
-    layer = "overlay";
-    anchor = "top-right";
+    settings = {
+      default-timeout = 5000;
+      ignore-timeout = true;
+      max-visible = 5;
+      font = "sans-serif 11";
+      background-color = "#1e1e2e";
+      text-color = "#cdd6f4";
+      border-color = "#89b4fa";
+      border-size = 2;
+      border-radius = 8;
+      padding = "10";
+      margin = "10";
+      layer = "overlay";
+      anchor = "top-right";
+    };
   };
-
-  # QuickShell - configurable status bar/shell
-  home.packages = with pkgs; [
-    quickshell
-  ];
 
   # QuickShell configuration
   home.file.".config/quickshell/shell.qml".text = ''

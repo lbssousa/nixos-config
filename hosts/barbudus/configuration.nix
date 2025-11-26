@@ -21,6 +21,7 @@
   # Graphics configuration - hybrid Intel + Nvidia
   hardware.nvidia = {
     modesetting.enable = true;
+    open = false;  # Use proprietary driver for MX230 (older GPU)
     prime = {
       # Find bus IDs with: lspci | grep VGA
       intelBusId = "PCI:0:2:0";
@@ -35,19 +36,13 @@
   };
 
   # Enable OpenGL
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
   };
 
   # Video drivers
   services.xserver.videoDrivers = [ "nvidia" ];
-
-  # Nvidia-specific package
-  environment.systemPackages = with pkgs; [
-    nvidia-offload # Helper script for PRIME offload
-  ];
 
   # Automatic system upgrades
   system.autoUpgrade = {
