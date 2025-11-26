@@ -50,6 +50,8 @@
     neovim
     nix-index
     zathura
+    # Para evitar o erro "The name ca.desrt.dconf was not provided by any .service files"
+    dconf
     # Distrobox for running any Linux distribution in containers
     distrobox
     # QuickShell - configurable status bar/shell
