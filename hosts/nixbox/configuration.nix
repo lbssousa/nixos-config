@@ -10,6 +10,9 @@
     ../../modules/packages.nix
     ../../modules/ssh.nix
     ../../modules/users.nix
+    ../../modules/desktop.nix
+    ../../modules/niri.nix
+    ../../modules/wayland-apps.nix
   ];
 
   # System configuration
