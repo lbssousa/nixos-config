@@ -99,6 +99,10 @@
               # PDF viewer (default per-user via home/common.nix MIME types)
               zathura
 
+              # Media and hardware controls (used by Umbriel keybinds)
+              playerctl
+              brightnessctl
+
               # GTK3 theme for compatibility with legacy apps
               adw-gtk3
             ];
