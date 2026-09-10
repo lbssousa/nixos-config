@@ -125,6 +125,9 @@
       enableCompletion = true;
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
+      # Fish-style history search: Up/Down navigate the history by the prefix
+      # already typed (like Fish), not by exact-position recall.
+      historySubstringSearch.enable = true;
 
       # Powerlevel10k as the default Zsh prompt for every user (Zsh only —
       # Bash/Fish keep the shared Starship prompt below). Uses the "rainbow"
@@ -201,6 +204,9 @@
 
           # Case-insensitive completions
           zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+
+          # Fish-like auto-cd: typing a directory path changes into it
+          setopt autocd
 
           just() { command just --justfile "$(_nix_cfg)/justfile" "$@"; }
         ''
