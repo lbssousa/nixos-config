@@ -74,7 +74,8 @@
 
           environment = {
             systemPackages = with pkgs; [
-              # Default terminal
+              # Default terminal (single undecorated profile — see
+              # modules/home/apps/terminals/ghostty.nix)
               ghostty
 
               # PGP/X.509 key management

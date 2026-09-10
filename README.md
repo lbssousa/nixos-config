@@ -15,7 +15,7 @@ Personal NixOS configuration based on Flakes, with Btrfs, declarative partitioni
 - ✅ **Flatpak**: Browsers and apps with no nixpkgs equivalent (DistroShelf, Ignition, Warehouse, Flatseal), installed declaratively via nix-flatpak
 - ✅ **Podman + Distrobox**: Rootless containers (Silverblue-like experience)
 - ✅ **Home Manager**: User configuration management (as a NixOS module, and standalone)
-- ✅ **Ghostty**: Modern terminal via Nix, with an undecorated profile for a quake-style drop-down
+- ✅ **Ghostty**: Modern terminal via Nix, undecorated single-profile setup
 - ✅ **Multi-host**: Machine-specific configurations
 - ✅ **Modular**: Shared modules for easy maintenance
 - ✅ **Secure Boot**: Support via Limine (barbudus)
@@ -90,7 +90,7 @@ Personal NixOS configuration based on Flakes, with Btrfs, declarative partitioni
 │   │   │   │   ├── keepassxc.nix
 │   │   │   │   └── yubikey.nix
 │   │   │   └── terminals/
-│   │   │       ├── ghostty.nix    # Default terminal, decorated/undecorated profiles
+│   │   │       ├── ghostty.nix    # Default terminal, undecorated (single profile)
 │   │   │       └── tmux.nix
 │   │   └── desktop/
 │   │       └── ibus-compose.nix   # Deprecated — superseded by the tmpfiles rule
