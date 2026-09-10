@@ -11,7 +11,6 @@
 {
   imports = [
     ../modules/home/apps/browsers/brave.nix
-    ../modules/home/apps/security/bitwarden.nix
     ../modules/home/apps/security/keepassxc.nix
   ];
 
@@ -127,6 +126,18 @@
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
 
+      # Powerlevel10k as the default Zsh prompt for every user (Zsh only —
+      # Bash/Fish keep the shared Starship prompt below). Uses the "rainbow"
+      # preset bundled with the package; run `p10k configure` interactively to
+      # generate a personal ~/.p10k.zsh and adjust initContent to source it.
+      plugins = [
+        {
+          name = "powerlevel10k";
+          src = pkgs.zsh-powerlevel10k;
+          file = "share/zsh/themes/powerlevel10k/powerlevel10k.zsh-theme";
+        }
+      ];
+
       history = {
         size = 10000;
         save = 50000;
@@ -163,27 +174,41 @@
         dkc = "podman-compose";
       };
 
-      initContent = ''
-        _nix_cfg() {
-          if [ -n "$(ls -A /etc/nixos 2>/dev/null)" ]; then
-            printf '%s' /etc/nixos
-          else
-            printf '%s' "$(xdg-user-dir PROJECTS)/lbssousa/nix-config"
+      initContent = lib.mkMerge [
+        # Instant prompt must be the first thing that runs in .zshrc — before
+        # any command that could produce output — so it has to sit ahead of
+        # every other init block (path setup starts at order 500).
+        (lib.mkOrder 50 ''
+          if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
+            source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
           fi
-        }
+        '')
+        ''
+          _nix_cfg() {
+            if [ -n "$(ls -A /etc/nixos 2>/dev/null)" ]; then
+              printf '%s' /etc/nixos
+            else
+              printf '%s' "$(xdg-user-dir PROJECTS)/lbssousa/nix-config"
+            fi
+          }
 
-        # Zoxide (smart cd)
-        eval "$(zoxide init zsh)"
+          # Zoxide (smart cd)
+          eval "$(zoxide init zsh)"
 
-        # fzf integration
-        source ${pkgs.fzf}/share/fzf/key-bindings.zsh
-        source ${pkgs.fzf}/share/fzf/completion.zsh
+          # fzf integration
+          source ${pkgs.fzf}/share/fzf/key-bindings.zsh
+          source ${pkgs.fzf}/share/fzf/completion.zsh
 
-        # Case-insensitive completions
-        zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+          # Case-insensitive completions
+          zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
-        just() { command just --justfile "$(_nix_cfg)/justfile" "$@"; }
-      '';
+          just() { command just --justfile "$(_nix_cfg)/justfile" "$@"; }
+        ''
+        # After the theme is sourced (plugins source at order 900).
+        (lib.mkOrder 950 ''
+          source ${pkgs.zsh-powerlevel10k}/share/zsh/themes/powerlevel10k/config/p10k-rainbow.zsh
+        '')
+      ];
     };
 
     # Fish shell configuration (the system's default shell)
@@ -237,9 +262,12 @@
     };
 
     # Starship — official "Catppuccin Powerline" preset, Mocha palette (the darkest)
+    # Prompt for Bash and Fish. Zsh uses Powerlevel10k (see programs.zsh
+    # above) — Starship and Powerlevel10k both hook the prompt, so only for
+    # Zsh the Starship integration is disabled.
     starship = {
       enable = true;
-      enableZshIntegration = lib.mkDefault true;
+      enableZshIntegration = false;
       enableFishIntegration = lib.mkDefault true;
       enableBashIntegration = lib.mkDefault true;
       settings = {
@@ -560,4 +588,12 @@
       };
     };
   };
+
+  # OpenSSH ssh-agent as the default session SSH agent for every user
+  # (replaces the Bitwarden Flatpak agent, which was removed from the default
+  # installation). Runs a systemd --user service listening on
+  # $XDG_RUNTIME_DIR/ssh-agent and exports SSH_AUTH_SOCK in every shell.
+  # FIDO/SK keys are still not signed by any agent ("agent refused operation")
+  # — see the IdentityAgent none workaround in home/users/abutre/home.nix.
+  services.ssh-agent.enable = true;
 }

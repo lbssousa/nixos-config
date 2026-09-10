@@ -63,9 +63,11 @@
     pinentry.package = pkgs.pinentry-gnome3;
   };
 
-  # OpenSSH's native ssh-agent doesn't support ED25519-SK keys (YubiKey
-  # resident keys) and returns "agent refused operation" when trying to use them.
-  services.ssh-agent.enable = false;
+  # OpenSSH's ssh-agent is enabled by default for every user in
+  # home/common.nix; it handles regular keys. ED25519-SK / FIDO resident keys
+  # are still not signed by any agent ("agent refused operation"), so abutre
+  # bypasses it for those with IdentityAgent none (home/users/abutre/home.nix).
+  services.ssh-agent.enable = true;
 
   xdg.configFile."Yubico/README-pam_u2f.txt".text = ''
     Initial YubiKey registration for pam_u2f (per user):

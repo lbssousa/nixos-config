@@ -26,7 +26,6 @@ in
     # ./rclone.nix  # disabled until Google Drive OAuth reauthentication
     ./vscode.nix
     ./fish.nix
-    ./zsh.nix
   ];
 
   home = {

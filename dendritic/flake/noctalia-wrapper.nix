@@ -53,7 +53,6 @@
             flatpak = {
               enable = true;
               packages = [
-                "com.bitwarden.desktop" # Password manager
                 "com.github.tchx84.Flatseal" # Flatpak permissions manager
                 "com.ranfdev.DistroShelf" # Container distro manager
                 "io.github.flattool.Ignition" # Flatpak autostart manager
