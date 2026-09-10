@@ -62,20 +62,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Noctalia suite — replaces GNOME as the desktop environment
-    noctalia = {
-      url = "github:noctalia-dev/noctalia";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    umbriel = {
-      url = "github:noctalia-dev/umbriel";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    noctalia-greeter = {
-      url = "github:noctalia-dev/noctalia-greeter";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # ── Noctalia desktop suite ──────────────────────────────────────────────
+    # Umbriel: independent wlroots Wayland compositor
+    umbriel.url = "github:noctalia-dev/umbriel";
+    # Noctalia Shell: bars, launcher, dock, notifications, OSDs, lock screen
+    noctalia.url = "github:noctalia-dev/noctalia";
+    # Noctalia Greeter: login greeter for greetd
+    noctalia-greeter.url = "github:noctalia-dev/noctalia-greeter";
+  };
 
+  nixConfig = {
+    extra-substituters = [
+      "https://noctalia.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+    ];
   };
 
   outputs =

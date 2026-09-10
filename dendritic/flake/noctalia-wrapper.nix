@@ -1,22 +1,30 @@
 # Noctalia flake-parts module: adds the Noctalia suite (Umbriel compositor,
 # Noctalia Shell, Noctalia Greeter) to the sharedModules of all hosts.
 # Replaces GNOME entirely — see dendritic/flake/gnome-wrapper.nix (removed).
-{ inputs, ... }:
+#
+# Packages and NixOS modules come from the upstream flakes:
+#   - github:noctalia-dev/umbriel        (compositor + xdg-desktop-portal)
+#   - github:noctalia-dev/noctalia       (shell: bars, launcher, dock, ...)
+#   - github:noctalia-dev/noctalia-greeter (login greeter for greetd)
+# Per-user settings (keybinds, theme, dock) live in home/users/<user>/noctalia.nix
+# via Home Manager's native programs.umbriel and programs.noctalia modules.
+{ ... }:
 {
   config = {
     dendritic.nixos.sharedModules = [
-      inputs.umbriel.nixosModules.default
-      inputs.noctalia.nixosModules.default
-      inputs.noctalia-greeter.nixosModules.default
-
       (
-        { pkgs, ... }:
+        { pkgs, inputs, ... }:
         {
+          imports = [
+            inputs.umbriel.nixosModules.default
+            inputs.noctalia.nixosModules.default
+            inputs.noctalia-greeter.nixosModules.default
+          ];
+
           programs = {
             # ── Compositor: Umbriel (independent wlroots compositor) ────────
-            # Registers the "Umbriel" Wayland session and its xdg-desktop-portal
-            # backend (screencast/screenshot/file-chooser via
-            # xdg-desktop-portal-umbriel, falling back to gtk).
+            # The flake NixOS module registers the "Umbriel" Wayland session,
+            # installs xdg-desktop-portal-umbriel, and sets up systemd services.
             umbriel.enable = true;
 
             # ── Shell: Noctalia (bars, launcher, dock, notifications, OSDs,

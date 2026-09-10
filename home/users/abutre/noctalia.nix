@@ -1,20 +1,21 @@
 # Noctalia configuration for the abutre user: compositor (Umbriel) and shell.
-_:
+# Umbriel and Noctalia HM modules come from the upstream flakes
+# (github:noctalia-dev/umbriel and github:noctalia-dev/noctalia), imported
+# via home/mkUserHome.nix sharedModules. They provide programs.umbriel.settings
+# and programs.noctalia.settings which serialize to TOML automatically.
+{ ... }:
 
 {
   # ── Compositor: Umbriel ────────────────────────────────────────────────
   programs.umbriel = {
     enable = true;
     settings = {
-      # Umbriel's general.autostart runs shell commands once after startup —
-      # it does NOT process XDG autostart entries (that's why
+      # general.autostart runs shell commands once after startup — it
+      # does NOT process XDG autostart entries (that's why
       # programs.keepassxc.autostart is not used). "keepassxc" must launch with
       # the session so its org.freedesktop.secrets integration (enabled in
       # modules/home/apps/security/keepassxc.nix) is available to apps.
-      general.autostart = [
-        "noctalia"
-        "keepassxc"
-      ];
+      general.autostart = [ "noctalia" "keepassxc" ];
 
       # br+abnt2 layout for the session.
       # Mirrors services.xserver.xkb defined in localization.nix — already
