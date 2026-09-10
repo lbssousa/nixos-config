@@ -595,6 +595,12 @@
     };
   };
 
+  # Noctalia plugins enabled by default for every user.
+  programs.noctalia.settings.plugins = {
+    enabled = [ "kenn/keybind-cheatsheet" ];
+    auto_update = "all";
+  };
+
   # OpenSSH ssh-agent as the default session SSH agent for every user
   # (replaces the Bitwarden Flatpak agent, which was removed from the default
   # installation). Runs a systemd --user service listening on
