@@ -1,3 +1,15 @@
+# KeePassXC — installed by default for every user (imported from
+# home/common.nix) and configured as the default session Secret Service
+# provider, replacing gnome-keyring (system-side removal in
+# modules/system/security/yubikey.nix).
+#
+# The Secret Service integration registers org.freedesktop.secrets while
+# KeePassXC is running, so the app must be started with the session — see
+# "keepassxc" in programs.umbriel.settings.general.autostart
+# (home/users/abutre/noctalia.nix). The HM-native xdg.autostart option of
+# programs.keepassxc is NOT used because Umbriel only executes the
+# general.autostart shell-command list and never processes
+# ~/.config/autostart/*.desktop entries.
 { pkgs, ... }:
 {
   programs.keepassxc = {
@@ -16,6 +28,11 @@
         ShowTrayIcon = true;
         TrayIconAppearance = "colorful";
       };
+      # Serves org.freedesktop.secrets (secret-storage spec) to session apps
+      # once a database is open and unlocked — mirrors what gnome-keyring used
+      # to provide. Disabled by default in KeePassXC; enabling it here is what
+      # makes KeePassXC the session's default secrets solution.
+      Programs.SecretServiceIntegration = true;
       Security = {
         IconDownloadFallback = true;
         LockDatabaseIdle = false;

@@ -1,10 +1,13 @@
 # System support for YubiKey/SmartCard (pcscd) and, opt-in, FIDO2/U2F auth.
 #
-# PC/SC (smartcard access), fingerprint PAM wiring, and gnome-keyring are
-# always on — they're independent of FIDO2/U2F. The pam_u2f-based PAM/PolKit
-# authentication itself (security.pam.u2f + the per-service u2f.enable
-# flags) is gated behind security.fido2Auth.enable, disabled by default:
-# enable it per-host once a YubiKey is actually enrolled
+# PC/SC (smartcard access) and fingerprint PAM wiring are always on — they're
+# independent of FIDO2/U2F. Session secrets are no longer handled here:
+# KeePassXC (Secret Service integration, see
+# modules/home/apps/security/keepassxc.nix) replaced the previously enabled
+# gnome-keyring daemon, so the PAM unlock hooks below are gone. The pam_u2f-
+# based PAM/PolKit authentication itself (security.pam.u2f + the per-service
+# u2f.enable flags) is gated behind security.fido2Auth.enable, disabled by
+# default: enable it per-host once a YubiKey is actually enrolled
 # (see /persist/etc/u2f-mappings).
 {
   config,
@@ -32,10 +35,8 @@ in
 
   config = lib.mkMerge [
     {
-      # Always on: PC/SC daemon (YubiKey PIV/OpenPGP, smartcards) and the
-      # secret-service keyring daemon — unrelated to FIDO2/U2F.
+      # Always on: PC/SC daemon (YubiKey PIV/OpenPGP, smartcards).
       services.pcscd.enable = true;
-      services.gnome.gnome-keyring.enable = true;
 
       security.pam.services = {
         # Sudo: fingerprint (sufficient) → password.
@@ -67,17 +68,14 @@ in
           };
         };
 
-        # TTY console login (getty): password, keyring unlock on success.
-        login.enableGnomeKeyring = true;
+        # TTY console login (getty): password only.
+        # (gnome-keyring's PAM unlock hook was removed — KeePassXC serves the
+        # session secret service instead; see modules/home/apps/security/keepassxc.nix.)
+        login.enableGnomeKeyring = false;
 
         # Graphical login (Noctalia Greeter, via greetd): fingerprint
-        # (sufficient) → password, keyring unlock on success.
-        # enableGnomeKeyring: unlocks the keyring on successful login —
-        # despite the option name, gnome-keyring is a standalone
-        # secret-service daemon (services.gnome.gnome-keyring above) used
-        # regardless of desktop.
+        # (sufficient) → password.
         greetd = {
-          enableGnomeKeyring = true;
           fprintAuth = true;
         };
 

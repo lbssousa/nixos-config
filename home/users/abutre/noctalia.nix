@@ -6,7 +6,15 @@ _:
   programs.umbriel = {
     enable = true;
     settings = {
-      general.autostart = [ "noctalia" ];
+      # Umbriel's general.autostart runs shell commands once after startup —
+      # it does NOT process XDG autostart entries (that's why
+      # programs.keepassxc.autostart is not used). "keepassxc" must launch with
+      # the session so its org.freedesktop.secrets integration (enabled in
+      # modules/home/apps/security/keepassxc.nix) is available to apps.
+      general.autostart = [
+        "noctalia"
+        "keepassxc"
+      ];
 
       # br+abnt2 layout for the session.
       # Mirrors services.xserver.xkb defined in localization.nix — already

@@ -14,7 +14,6 @@ in
 {
   imports = [
     ../../../modules/home/apps/nix-validation.nix
-    ../../../modules/home/apps/security/keepassxc.nix
     ../../../modules/home/apps/security/yubikey.nix
     ../../../modules/home/apps/editors/helix
     ../../../modules/home/apps/editors/zed.nix
