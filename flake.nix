@@ -44,6 +44,12 @@
     # nix-flatpak for declarative Flatpaks with no nixpkgs equivalent
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
 
+    # nix-linuxbrew — NixOS + Home Manager modules for Homebrew on Linux
+    nix-linuxbrew = {
+      url = "github:deepwatrcreatur/nix-linuxbrew";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # nixvim for declarative Neovim configuration
     nixvim.url = "github:nix-community/nixvim";
 

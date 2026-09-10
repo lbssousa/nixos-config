@@ -12,6 +12,35 @@
         zlib
         alsa-lib # libasound.so.2
         wayland # libwayland-client.so.0
+
+        # Electron/GTK runtime libraries needed by Homebrew casks (e.g.
+        # visual-studio-code-linux) that ship prebuilt Linux binaries.
+        nspr
+        nss
+        glib
+        gtk3
+        cairo
+        pango
+        gdk-pixbuf
+        atk
+        at-spi2-atk
+        at-spi2-core
+        dbus
+        expat
+        fontconfig
+        freetype
+        cups
+        mesa
+        libdrm
+        libxkbcommon
+        libx11
+        libxcb
+        libxcomposite
+        libxdamage
+        libxext
+        libxfixes
+        libxrandr
+        libxshmfence
       ];
     };
   };
@@ -63,8 +92,9 @@
   # Graphical editor with an FHS environment: lets extensions and helper
   # tools that depend on standard FHS paths work correctly on NixOS.
   # Note: VS Code itself is no longer installed here — it comes from the
-  # Homebrew "visual-studio-code-linux" cask (modules/home/apps/homebrew.nix),
-  # which is genuinely FHS-compliant and needs no wrapper.
+  # Homebrew "visual-studio-code-linux" cask (system-level config in
+  # modules/system/tools/homebrew.nix), which is genuinely FHS-compliant and
+  # needs no wrapper.
   environment.systemPackages = with pkgs; [
     zed-editor-fhs
   ];

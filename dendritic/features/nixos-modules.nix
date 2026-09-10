@@ -40,6 +40,28 @@ in
           ];
         }
       )
+      # Homebrew (Linuxbrew) — system-level package management analogous to
+      # Flatpak. The NixOS module pre-installs these packages on activation;
+      # users can install additional ones manually via `brew install`.
+      # ensureCompiler=false: opencode ships a bottle and the casks are
+      # prebuilt binaries — no LLVM build needed on every switch.
+      {
+        programs.linuxbrew = {
+          enableSystemSetup = true;
+          ensureCompiler = false;
+          taps = [
+            "ublue-os/homebrew-tap"
+          ];
+          brews = [
+            "opencode"
+          ];
+          casks = [
+            "claude-code"
+            "copilot-cli"
+            "ublue-os/tap/visual-studio-code-linux"
+          ];
+        };
+      }
     ];
 
     userModules = map mkUserModule config.dendritic.users;

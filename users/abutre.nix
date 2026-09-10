@@ -21,11 +21,10 @@ lib.mkMerge [
 
     # Packages specific to the abutre user, installed via NixOS.
     # Development tools and apps exclusive to this user.
-    # Note: claude-code, github-copilot-cli and opencode moved to Homebrew
-    # ("claude-code"/"copilot-cli" casks, "opencode" formula — see
-    # modules/home/apps/homebrew.nix): all three update very frequently
-    # upstream, better tracked by Homebrew's rolling formulae than nixpkgs'
-    # release cadence.
+    # Note: claude-code, github-copilot-cli and opencode are managed at the
+    # system level via Homebrew (see modules/system/tools/homebrew.nix) —
+    # declarative taps/formulae/casks are configured in
+    # dendritic/features/nixos-modules.nix.
     users.users.abutre.packages = with pkgs; [
       # Development
       gcc

@@ -37,7 +37,7 @@
       "plugdev" # USB device access
       "dialout" # Serial ports
       "docker" # Docker compatibility (Podman)
-      "linuxbrew" # Write access to the shared Homebrew prefix (see modules/system/tools/homebrew.nix)
+      "linuxbrew" # Write access to the shared Homebrew prefix (nix-linuxbrew NixOS module)
     ]
     ++ lib.optionals hasSudo [
       "wheel" # sudo
