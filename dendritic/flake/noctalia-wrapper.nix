@@ -96,6 +96,9 @@
               # System utility (ISO flashing) — no Noctalia/Umbriel equivalent
               impression
 
+              # PDF viewer (default per-user via home/common.nix MIME types)
+              zathura
+
               # GTK3 theme for compatibility with legacy apps
               adw-gtk3
             ];
